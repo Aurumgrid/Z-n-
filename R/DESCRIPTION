@@ -1,0 +1,9 @@
+Package: GridwalkerAnalysis
+Title: Analysis Scripts for the Gridwalker Project
+Version: 0.1.0
+Author: Jules
+Description: A collection of scripts for power analysis and other statistical checks related to the Gridwalker project.
+Depends: R (>= 3.5.0)
+Imports:
+    pwr
+License: MIT
