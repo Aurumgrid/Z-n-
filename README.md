@@ -121,10 +121,12 @@ The repository is organized as follows:
     -   `assign_plates.py`: Creates a balanced Latin-square-based plate assignment.
     -   `estimate_g2.py`: Estimates the g²(τ) temporal correlation from photon arrival data.
     -   `match_rms.py`: Simulates matching a target magnetometer RMS value and generates a QC plot.
+    -   `nonlinear_king_plot.py`: Implements and demonstrates a non-linear King plot analysis.
 -   `results/`: The default output directory for generated files (e.g., `.csv`, `.json`, `.png`). This directory is created automatically.
 -   `tests/`: Contains unit and integration tests.
     -   `test_python_scripts.py`: `pytest` tests for the Python scripts.
     -   `test_r_power_calc.R`: `testthat` tests for the R script.
+    -   `test_nonlinear_king_plot.py`: `pytest` tests for the non-linear King plot analysis.
 -   `requirements.txt`: A list of Python package dependencies.
 -   `README.md`: This file.
 
@@ -171,6 +173,9 @@ python src/estimate_g2.py
 
 # Simulate magnetometer RMS matching and create a QC plot
 python src/match_rms.py
+
+# Run the non-linear King plot analysis demonstration
+python src/nonlinear_king_plot.py
 ```
 
 ### R Script

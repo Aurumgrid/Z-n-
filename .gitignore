@@ -1,18 +1,19 @@
-# Python
+# Python cache
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
 
-# R
-.Rproj.user/
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# R project files
+.Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 
+# Results - keep this commented out unless user wants to ignore results
+# results/
 # Results and outputs
 results/
 
