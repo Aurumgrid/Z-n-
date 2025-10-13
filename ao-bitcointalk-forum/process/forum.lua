@@ -121,6 +121,36 @@ Handlers.add("CreatePost", Handlers.utils.hasMatchingTag("Action", "CreatePost")
             return
         end
 
+        local newPost
+        local postId = tostring(math.random(1, 1e12))
+
+        -- Handle the special command
+        if content:lower():match("^!revealsatoshi$") then
+            newPost = {
+                Id = postId,
+                ThreadId = threadId,
+                Author = "Satoshi Nakamoto",
+                Content = "'If you don't believe me or don't get it, I don't have time to try to convince you, sorry.'",
+                CreatedAt = msg.Timestamp,
+                Likes = 9999
+            }
+            ao.send({ Target = msg.From, Data = "Satoshi has spoken." })
+        else
+            -- Regular post creation
+            newPost = {
+                Id = postId,
+                ThreadId = threadId,
+                Author = msg.Owner,
+                Content = content,
+                CreatedAt = msg.Timestamp,
+                Likes = 0
+            }
+            ao.send({ Target = msg.From, Data = "Post created successfully: " .. postId })
+        end
+
+        Posts[postId] = newPost
+
+        -- Update thread metadata
         local postId = tostring(math.random(1, 1e12))
         Posts[postId] = {
             Id = postId,
@@ -140,6 +170,7 @@ Handlers.add("CreatePost", Handlers.utils.hasMatchingTag("Action", "CreatePost")
         end
         table.insert(PostsByThread[threadId], 1, postId)
 
+        -- Re-sort threads by last post time to bubble up active threads
         -- Re-sort threads by last post time
         local categorySlug = Threads[threadId].Category
         table.sort(ThreadsByCategory[categorySlug], function(a, b)
@@ -151,6 +182,8 @@ Handlers.add("CreatePost", Handlers.utils.hasMatchingTag("Action", "CreatePost")
             Target = ao.id,
             Action = "Lattica-Event",
             Name = "post:new",
+            Data = json.encode(newPost)
+        })
             Data = json.encode(Posts[postId])
         })
 
