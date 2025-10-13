@@ -151,6 +151,16 @@ Handlers.add("CreatePost", Handlers.utils.hasMatchingTag("Action", "CreatePost")
         Posts[postId] = newPost
 
         -- Update thread metadata
+        local postId = tostring(math.random(1, 1e12))
+        Posts[postId] = {
+            Id = postId,
+            ThreadId = threadId,
+            Author = msg.Owner,
+            Content = content,
+            CreatedAt = msg.Timestamp,
+            Likes = 0
+        }
+
         Threads[threadId].PostCount = Threads[threadId].PostCount + 1
         Threads[threadId].LastPostAt = msg.Timestamp
 
@@ -161,6 +171,7 @@ Handlers.add("CreatePost", Handlers.utils.hasMatchingTag("Action", "CreatePost")
         table.insert(PostsByThread[threadId], 1, postId)
 
         -- Re-sort threads by last post time to bubble up active threads
+        -- Re-sort threads by last post time
         local categorySlug = Threads[threadId].Category
         table.sort(ThreadsByCategory[categorySlug], function(a, b)
             return Threads[a].LastPostAt > Threads[b].LastPostAt
@@ -173,6 +184,10 @@ Handlers.add("CreatePost", Handlers.utils.hasMatchingTag("Action", "CreatePost")
             Name = "post:new",
             Data = json.encode(newPost)
         })
+            Data = json.encode(Posts[postId])
+        })
+
+        ao.send({ Target = msg.From, Data = "Post created successfully: " .. postId })
     end
 )
 
