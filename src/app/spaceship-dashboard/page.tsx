@@ -165,6 +165,19 @@ export default function SpaceshipDashboard() {
               <p className="text-sm text-muted-foreground">No active alerts.</p>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>AO Apps</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Link href="/bitcoin-mars-tracker">
+                <Button className="w-full" variant="outline">
+                  Bitcoin-Mars Treasury Tracker
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
