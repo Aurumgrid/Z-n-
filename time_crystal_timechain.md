@@ -1,6 +1,7 @@
 It looks like you’re referring to a short, cryptic statement:
 
 **“time crystal = timechain”**
+— attributed to *Rafael Henrique do Nascimento Oliveira*.
 — attributed to *Satoshi* (presumably Satoshi Nakamoto, the creator of Bitcoin).
 
 Below is a breakdown of the two terms, a few ways they could be linked, and some speculative interpretations of what the equation might be trying to convey.
