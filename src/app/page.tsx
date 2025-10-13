@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import en from "@/locales/en-US.json";
+import br from "@/locales/br-BR.json";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -51,6 +53,8 @@ interface NotionPage {
 }
 
 export default function TimeKeeperNotionUploader() {
+  const [locale, setLocale] = useState("en-US");
+  const t = locale === "en-US" ? en : br;
   const [activeTab, setActiveTab] = useState("uploader");
   const [uploadItems, setUploadItems] = useState<NotionUpload[]>([]);
   const [integrations, setIntegrations] = useState<NotionIntegration[]>([]);
@@ -71,26 +75,26 @@ export default function TimeKeeperNotionUploader() {
     setUploadItems([
       {
         id: "1",
-        name: "Project Documentation",
+        name: t.projectDocumentation,
         type: "page",
         size: "2.4 MB",
         status: "completed",
         progress: 100,
         uploadDate: "2024-01-20T10:30:00Z",
-        description: "Main project documentation page",
+        description: t.projectDocumentationDescription,
         notionUrl: "https://notion.so/project-docs",
         pageCount: 15,
         lastSynced: "2024-01-20T10:30:00Z"
       },
       {
         id: "2",
-        name: "Development Tasks",
+        name: t.developmentTasks,
         type: "database",
         size: "5.7 MB",
         status: "syncing",
         progress: 75,
         uploadDate: "2024-01-19T14:22:00Z",
-        description: "Task tracking database",
+        description: t.developmentTasksDescription,
         notionUrl: "https://notion.so/dev-tasks",
         pageCount: 42,
         lastSynced: "2024-01-20T09:15:00Z"
@@ -100,7 +104,7 @@ export default function TimeKeeperNotionUploader() {
     setIntegrations([
       {
         id: "int1",
-        name: "Main Workspace",
+        name: t.mainWorkspace,
         token: "secret_*****************************",
         workspaceId: "workspace_1234567890",
         status: "connected",
@@ -113,7 +117,7 @@ export default function TimeKeeperNotionUploader() {
     setNotionPages([
       {
         id: "page1",
-        title: "Getting Started",
+        title: t.gettingStarted,
         url: "https://notion.so/getting-started",
         lastEdited: "2024-01-20T09:15:00Z",
         type: "page",
@@ -122,7 +126,7 @@ export default function TimeKeeperNotionUploader() {
       },
       {
         id: "page2",
-        title: "API Documentation",
+        title: t.apiDocumentation,
         url: "https://notion.so/api-docs",
         lastEdited: "2024-01-19T16:30:00Z",
         type: "database",
@@ -131,7 +135,7 @@ export default function TimeKeeperNotionUploader() {
       },
       {
         id: "page3",
-        title: "Meeting Notes",
+        title: t.meetingNotes,
         url: "https://notion.so/meeting-notes",
         lastEdited: "2024-01-18T11:45:00Z",
         type: "page",
@@ -139,7 +143,7 @@ export default function TimeKeeperNotionUploader() {
         isArchived: false
       }
     ]);
-  }, []);
+  }, [t]);
 
   const handleUpload = async () => {
     if (!notionToken || !notionUrl) return;
@@ -164,13 +168,13 @@ export default function TimeKeeperNotionUploader() {
 
     // Simulate upload process
     const steps = [
-      { progress: 10, message: "Connecting to Notion API..." },
-      { progress: 25, message: "Authenticating with Notion..." },
-      { progress: 40, message: "Fetching page data..." },
-      { progress: 60, message: "Processing content..." },
-      { progress: 80, message: "Converting to TimeKeeper format..." },
-      { progress: 95, message: "Storing in blockchain..." },
-      { progress: 100, message: "Upload completed!" }
+      { progress: 10, message: t.connectingToNotion },
+      { progress: 25, message: t.authenticatingWithNotion },
+      { progress: 40, message: t.fetchingPageData },
+      { progress: 60, message: t.processingContent },
+      { progress: 80, message: t.convertingToTimeKeeper },
+      { progress: 95, message: t.storingInBlockchain },
+      { progress: 100, message: t.uploadCompleted }
     ];
 
     for (const step of steps) {
@@ -2036,11 +2040,24 @@ function extractNotionId() {
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">TimeKeeper OS Notion Integration</h1>
-        <p className="text-lg text-muted-foreground">
-          Advanced Notion workspace integration for TimeKeeper OS v2.0
-        </p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-bold mb-4">{t.title}</h1>
+          <p className="text-lg text-muted-foreground">
+            {t.subtitle}
+          </p>
+        </div>
+        <div>
+          <Select value={locale} onValueChange={setLocale}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en-US">English (US)</SelectItem>
+              <SelectItem value="br-BR">Português (BR)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Integration Statistics */}
@@ -2048,7 +2065,7 @@ function extractNotionId() {
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-blue-600">{integrations.length}</div>
-            <div className="text-sm text-muted-foreground">Integrations</div>
+            <div className="text-sm text-muted-foreground">{t.integrations}</div>
           </CardContent>
         </Card>
         <Card>
@@ -2056,7 +2073,7 @@ function extractNotionId() {
             <div className="text-2xl font-bold text-green-600">
               {uploadItems.filter(u => u.status === "completed").length}
             </div>
-            <div className="text-sm text-muted-foreground">Uploaded</div>
+            <div className="text-sm text-muted-foreground">{t.uploaded}</div>
           </CardContent>
         </Card>
         <Card>
@@ -2064,7 +2081,7 @@ function extractNotionId() {
             <div className="text-2xl font-bold text-orange-600">
               {notionPages.length}
             </div>
-            <div className="text-sm text-muted-foreground">Notion Pages</div>
+            <div className="text-sm text-muted-foreground">{t.notionPages}</div>
           </CardContent>
         </Card>
         <Card>
@@ -2072,18 +2089,18 @@ function extractNotionId() {
             <div className="text-2xl font-bold text-purple-600">
               {uploadItems.filter(u => u.type === "database").length}
             </div>
-            <div className="text-sm text-muted-foreground">Databases</div>
+            <div className="text-sm text-muted-foreground">{t.databases}</div>
           </CardContent>
         </Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="uploader">Uploader</TabsTrigger>
-          <TabsTrigger value="integrations">Integrations</TabsTrigger>
-          <TabsTrigger value="documentation">Documentation</TabsTrigger>
-          <TabsTrigger value="examples">Examples</TabsTrigger>
-          <TabsTrigger value="conduct">Code of Conduct</TabsTrigger>
+          <TabsTrigger value="uploader">{t.uploader}</TabsTrigger>
+          <TabsTrigger value="integrations">{t.integrations}</TabsTrigger>
+          <TabsTrigger value="documentation">{t.documentation}</TabsTrigger>
+          <TabsTrigger value="examples">{t.examples}</TabsTrigger>
+          <TabsTrigger value="conduct">{t.codeOfConduct}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="uploader" className="mt-6">
@@ -2093,7 +2110,7 @@ function extractNotionId() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Badge variant="outline">Uploading</Badge>
+                    <Badge variant="outline">{t.uploading}</Badge>
                     {currentUpload.name}
                   </CardTitle>
                 </CardHeader>
@@ -2101,7 +2118,7 @@ function extractNotionId() {
                   <div className="space-y-4">
                     <Progress value={uploadProgress} className="w-full" />
                     <div className="text-sm text-muted-foreground">
-                      {uploadProgress}% Complete
+                      {t.uploadProgress.replace('{uploadProgress}', uploadProgress.toString())}
                     </div>
                   </div>
                 </CardContent>
@@ -2111,15 +2128,15 @@ function extractNotionId() {
             {/* Upload Form */}
             <Card>
               <CardHeader>
-                <CardTitle>Upload Notion Content</CardTitle>
+                <CardTitle>{t.uploadNotionContent}</CardTitle>
                 <CardDescription>
-                  Upload pages or databases from Notion to TimeKeeper OS
+                  {t.uploadDescription}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="notion-token">Notion Integration Token</Label>
+                    <Label htmlFor="notion-token">{t.notionToken}</Label>
                     <Input
                       value={notionToken}
                       onChange={(e) => setNotionToken(e.target.value)}
@@ -2127,43 +2144,43 @@ function extractNotionId() {
                       type="password"
                     />
                     <p className="text-sm text-muted-foreground mt-1">
-                      Create a new integration in Notion settings
+                      {t.notionTokenHint}
                     </p>
                   </div>
 
                   <div>
-                    <Label htmlFor="upload-type">Content Type</Label>
+                    <Label htmlFor="upload-type">{t.contentType}</Label>
                     <Select value={uploadType} onValueChange={setUploadType}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="page">Page</SelectItem>
-                        <SelectItem value="database">Database</SelectItem>
-                        <SelectItem value="block">Block</SelectItem>
-                        <SelectItem value="workspace">Workspace</SelectItem>
+                        <SelectItem value="page">{t.page}</SelectItem>
+                        <SelectItem value="database">{t.database}</SelectItem>
+                        <SelectItem value="block">{t.block}</SelectItem>
+                        <SelectItem value="workspace">{t.workspace}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
-                    <Label htmlFor="notion-url">Notion URL</Label>
+                    <Label htmlFor="notion-url">{t.notionUrl}</Label>
                     <Input
                       value={notionUrl}
                       onChange={(e) => setNotionUrl(e.target.value)}
                       placeholder="https://notion.so/your-page-or-database"
                     />
                     <p className="text-sm text-muted-foreground mt-1">
-                      Paste the URL of the Notion page or database
+                      {t.notionUrlHint}
                     </p>
                   </div>
 
                   <div>
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description">{t.description}</Label>
                     <Input
                       value={uploadDescription}
                       onChange={(e) => setUploadDescription(e.target.value)}
-                      placeholder="Upload description"
+                      placeholder={t.uploadDescriptionPlaceholder}
                     />
                   </div>
 
@@ -2173,22 +2190,22 @@ function extractNotionId() {
                       checked={syncEnabled}
                       onCheckedChange={setSyncEnabled}
                     />
-                    <Label htmlFor="sync-enabled">Enable automatic sync</Label>
+                    <Label htmlFor="sync-enabled">{t.enableSync}</Label>
                   </div>
 
                   {syncEnabled && (
                     <div>
-                      <Label htmlFor="sync-interval">Sync Interval (minutes)</Label>
+                      <Label htmlFor="sync-interval">{t.syncInterval}</Label>
                       <Select value={syncInterval} onValueChange={setSyncInterval}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="15">15 minutes</SelectItem>
-                          <SelectItem value="30">30 minutes</SelectItem>
-                          <SelectItem value="60">1 hour</SelectItem>
-                          <SelectItem value="120">2 hours</SelectItem>
-                          <SelectItem value="360">6 hours</SelectItem>
+                          <SelectItem value="15">{t.minutes15}</SelectItem>
+                          <SelectItem value="30">{t.minutes30}</SelectItem>
+                          <SelectItem value="60">{t.hour1}</SelectItem>
+                          <SelectItem value="120">{t.hours2}</SelectItem>
+                          <SelectItem value="360">{t.hours6}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -2203,7 +2220,7 @@ function extractNotionId() {
                     }
                     className="w-full"
                   >
-                    {isUploading ? "Uploading..." : "Upload Content"}
+                    {isUploading ? t.uploadingButton : t.uploadContentButton}
                   </Button>
                 </div>
               </CardContent>
@@ -2212,9 +2229,9 @@ function extractNotionId() {
             {/* Upload History */}
             <Card>
               <CardHeader>
-                <CardTitle>Upload History</CardTitle>
+                <CardTitle>{t.uploadHistory}</CardTitle>
                 <CardDescription>
-                  Recent Notion uploads to TimeKeeper OS
+                  {t.recentUploads}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -2240,11 +2257,11 @@ function extractNotionId() {
                       <CardContent>
                         <div className="flex items-center justify-between">
                           <div className="text-sm text-muted-foreground">
-                            <div>Size: {item.size}</div>
-                            <div>Pages: {item.pageCount || 'N/A'}</div>
-                            <div>Uploaded: {new Date(item.uploadDate).toLocaleString()}</div>
+                            <div>{t.size.replace('{size}', item.size)}</div>
+                            <div>{t.pages.replace('{pageCount}', item.pageCount ? item.pageCount.toString() : 'N/A')}</div>
+                            <div>{t.uploadedDate.replace('{uploadDate}', new Date(item.uploadDate).toLocaleString())}</div>
                             {item.lastSynced && (
-                              <div>Last Synced: {new Date(item.lastSynced).toLocaleString()}</div>
+                              <div>{t.lastSynced.replace('{lastSynced}', new Date(item.lastSynced).toLocaleString())}</div>
                             )}
                             {item.notionUrl && (
                               <div>
@@ -2254,7 +2271,7 @@ function extractNotionId() {
                                   rel="noopener noreferrer"
                                   className="text-blue-600 hover:underline"
                                 >
-                                  View in Notion
+                                  {t.viewInNotion}
                                 </a>
                               </div>
                             )}
@@ -2266,7 +2283,7 @@ function extractNotionId() {
                                 variant="outline"
                                 onClick={() => handleSync(item.id)}
                               >
-                                Sync
+                                {t.sync}
                               </Button>
                             )}
                             {item.status === "syncing" && (
@@ -2288,9 +2305,9 @@ function extractNotionId() {
             {/* Integrations List */}
             <Card>
               <CardHeader>
-                <CardTitle>Notion Integrations</CardTitle>
+                <CardTitle>{t.notionIntegrations}</CardTitle>
                 <CardDescription>
-                  Connected Notion workspaces and their status
+                  {t.connectedWorkspaces}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -2304,26 +2321,26 @@ function extractNotionId() {
                             {integration.status}
                           </Badge>
                         </div>
-                        <CardDescription>Workspace ID: {integration.workspaceId}</CardDescription>
+                        <CardDescription>{t.workspaceId.replace('{workspaceId}', integration.workspaceId)}</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                           <div>
-                            <div className="font-medium">Pages</div>
+                            <div className="font-medium">{t.pages.replace(': {pageCount}', '')}</div>
                             <div className="text-muted-foreground">{integration.pageCount}</div>
                           </div>
                           <div>
-                            <div className="font-medium">Databases</div>
+                            <div className="font-medium">{t.databases}</div>
                             <div className="text-muted-foreground">{integration.databaseCount}</div>
                           </div>
                           <div>
-                            <div className="font-medium">Last Sync</div>
+                            <div className="font-medium">{t.lastSync}</div>
                             <div className="text-muted-foreground">
                               {new Date(integration.lastSync).toLocaleDateString()}
                             </div>
                           </div>
                           <div>
-                            <div className="font-medium">Status</div>
+                            <div className="font-medium">{t.status}</div>
                             <div className="text-muted-foreground">{integration.status}</div>
                           </div>
                         </div>
@@ -2337,9 +2354,9 @@ function extractNotionId() {
             {/* Notion Pages Browser */}
             <Card>
               <CardHeader>
-                <CardTitle>Notion Content Browser</CardTitle>
+                <CardTitle>{t.notionContentBrowser}</CardTitle>
                 <CardDescription>
-                  Browse pages and databases in your Notion workspace
+                  {t.browseNotionContent}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -2354,19 +2371,19 @@ function extractNotionId() {
                               {page.type}
                             </Badge>
                             {page.isArchived && (
-                              <Badge variant="outline">Archived</Badge>
+                              <Badge variant="outline">{t.archived}</Badge>
                             )}
                           </div>
                         </div>
                         <CardDescription>
-                          Last edited: {new Date(page.lastEdited).toLocaleString()}
+                          {t.lastEdited.replace('{lastEdited}', new Date(page.lastEdited).toLocaleString())}
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center justify-between">
                           <div className="text-sm text-muted-foreground">
-                            <div>Child items: {page.childCount}</div>
-                            <div>Type: {page.type}</div>
+                            <div>{t.childItems.replace('{childCount}', page.childCount.toString())}</div>
+                            <div>{t.type.replace('{type}', page.type)}</div>
                           </div>
                           <div className="flex gap-2">
                             <Button
@@ -2374,7 +2391,7 @@ function extractNotionId() {
                               variant="outline"
                               onClick={() => window.open(page.url, '_blank')}
                             >
-                              Open in Notion
+                              {t.openInNotion}
                             </Button>
                             <Button
                               size="sm"
@@ -2384,7 +2401,7 @@ function extractNotionId() {
                                 setActiveTab("uploader");
                               }}
                             >
-                              Upload
+                              {t.upload}
                             </Button>
                           </div>
                         </div>
@@ -2400,9 +2417,9 @@ function extractNotionId() {
         <TabsContent value="documentation" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Documentation</CardTitle>
+              <CardTitle>{t.documentationTab}</CardTitle>
               <CardDescription>
-                Complete documentation for TimeKeeper OS Notion Integration
+                {t.completeDocumentation}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -2416,9 +2433,9 @@ function extractNotionId() {
         <TabsContent value="examples" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Code Examples</CardTitle>
+              <CardTitle>{t.codeExamples}</CardTitle>
               <CardDescription>
-                Practical examples and implementation samples
+                {t.implementationSamples}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -2432,9 +2449,9 @@ function extractNotionId() {
         <TabsContent value="conduct" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Code of Conduct</CardTitle>
+              <CardTitle>{t.codeOfConductTab}</CardTitle>
               <CardDescription>
-                Community guidelines and standards for TimeKeeper OS contributors
+                {t.communityGuidelines}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -2449,33 +2466,33 @@ function extractNotionId() {
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Quick Actions</CardTitle>
+            <CardTitle className="text-lg">{t.quickActions}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">
-              <div>• Connect new Notion workspace</div>
-              <div>• Upload pages and databases</div>
-              <div>• Configure automatic sync</div>
-              <div>• Browse Notion content</div>
-              <div>• Search uploaded content</div>
+              <div>{t.connectNewWorkspace}</div>
+              <div>{t.uploadPagesAndDatabases}</div>
+              <div>{t.configureSync}</div>
+              <div>{t.browseContent}</div>
+              <div>{t.searchContent}</div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">System Tools</CardTitle>
+            <CardTitle className="text-lg">{t.systemTools}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <Button asChild className="w-full" variant="outline">
-                <a href="/aurum-grid-uploader">Aurum Grid Uploader</a>
+                <a href="/aurum-grid-uploader">{t.aurumGridUploader}</a>
               </Button>
               <Button asChild className="w-full" variant="outline">
-                <a href="/spaceship-dashboard">Spaceship Dashboard</a>
+                <a href="/spaceship-dashboard">{t.spaceshipDashboard}</a>
               </Button>
               <div className="text-xs text-muted-foreground">
-                Upload symbolic, quantum, biometric, and standard data to the Aurum Grid harmonic ledger
+                {t.aurumGridDescription}
               </div>
             </div>
           </CardContent>
@@ -2483,25 +2500,25 @@ function extractNotionId() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">System Status</CardTitle>
+            <CardTitle className="text-lg">{t.systemStatus}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Notion API: Online</span>
+                <span>{t.notionApiStatus}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Blockchain Service: Online</span>
+                <span>{t.blockchainServiceStatus}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>Sync Service: Online</span>
+                <span>{t.syncServiceStatus}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                <span>Storage: 72% used</span>
+                <span>{t.storageUsed}</span>
               </div>
             </div>
           </CardContent>
