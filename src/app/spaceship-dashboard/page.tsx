@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Rocket, Network, Cpu, Database, AlertTriangle } from "lucide-react";
+import { Rocket, Network, Cpu, Database, AlertTriangle, Plus } from "lucide-react";
 import { NodeDetailsDialog } from "@/components/NodeDetailsDialog";
+import { useAuth } from "@/hooks/useAuth";
 
 interface EthereumStats {
   blockNumber: string;
@@ -19,6 +21,7 @@ interface AurumGridStatus {
 }
 
 export default function SpaceshipDashboard() {
+  const { isAuthenticated } = useAuth();
   const [ethStats, setEthStats] = useState<EthereumStats | null>(null);
   const [aurumStats, setAurumStats] = useState<AurumGridStatus | null>(null);
   const [loadingEth, setLoadingEth] = useState(true);
@@ -71,6 +74,14 @@ export default function SpaceshipDashboard() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-4xl font-bold">Spaceship Dashboard</h1>
         <div className="flex items-center gap-4">
+          {isAuthenticated && (
+            <Link href="/posts/new">
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                New Post
+              </Button>
+            </Link>
+          )}
           <Badge variant="outline">Ethereum Network: Mainnet</Badge>
           <Badge variant="secondary">Status: {loadingEth ? "Connecting..." : "Connected"}</Badge>
         </div>
