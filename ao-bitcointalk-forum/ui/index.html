@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AO Bitcointalk Forum</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body x-data="forum()" x-init="init()">
+    <header>
+        <h1>AO Bitcointalk Forum</h1>
+        <div class="auth-area">
+            <template x-if="!wallet.address">
+                <button @click="connectWallet()">Connect Wallet</button>
+            </template>
+            <template x-if="wallet.address">
+                <span x-text="`Connected: ${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}`"></span>
+            </template>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Categories</h2>
+            <ul>
+                <template x-for="category in categories" :key="category.Slug">
+                    <li>
+                        <a href="#" @click.prevent="selectCategory(category.Slug)" x-text="category.Name"></a>
+                    </li>
+                </template>
+            </ul>
+            <div x-show="wallet.isModerator">
+                <hr>
+                <h3>Admin</h3>
+                <input type="text" x-model="newCategoryName" placeholder="New category name">
+                <button @click="createCategory()">Create Category</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- Thread List View -->
+            <div x-show="view === 'threads'">
+                <h2 x-text="`Threads in ${currentCategory}`"></h2>
+                <button @click="view = 'newThread'">New Thread</button>
+                <ul>
+                    <template x-for="thread in threads" :key="thread.Id">
+                        <li>
+                            <a href="#" @click.prevent="selectThread(thread.Id)" x-text="thread.Title"></a>
+                            <small>Posts: <span x-text="thread.PostCount"></span>, Last Post: <span x-text="new Date(thread.LastPostAt).toLocaleString()"></span></small>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+
+            <!-- Post List View -->
+            <div x-show="view === 'posts'">
+                <h2 x-text="currentThread.Title"></h2>
+                <button @click="view = 'threads'; currentCategory = currentThread.Category">Back to Threads</button>
+                <div class="posts-container">
+                    <template x-for="post in posts" :key="post.Id">
+                        <div class="post">
+                            <p class="post-author" x-text="`By: ${post.Author.slice(0, 8)}...`"></p>
+                            <p x-text="post.Content"></p>
+                            <div class="post-meta">
+                                <span x-text="new Date(post.CreatedAt).toLocaleString()"></span>
+                                <button @click="likePost(post.Id)">👍 <span x-text="post.Likes"></span></button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <hr>
+                <div class="reply-box">
+                    <h3>Reply to Thread</h3>
+                    <textarea x-model="newPostContent" placeholder="Your reply..."></textarea>
+                    <button @click="createPost()">Submit Reply</button>
+                </div>
+            </div>
+
+            <!-- New Thread View -->
+            <div x-show="view === 'newThread'">
+                <h2>Create New Thread</h2>
+                <input type="text" x-model="newThreadTitle" placeholder="Thread Title">
+                <textarea x-model="newPostContent" placeholder="Your first post..."></textarea>
+                <button @click="createThread()">Create Thread</button>
+                <button @click="view = 'threads'">Cancel</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

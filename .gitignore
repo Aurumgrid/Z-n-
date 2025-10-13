@@ -14,3 +14,24 @@ dist/
 
 # Results - keep this commented out unless user wants to ignore results
 # results/
+# Results and outputs
+results/
+
+# IDE/Editor specific
+.vscode/
+.idea/
+
+# Node.js
+node_modules/
+.next/
+out/
+build/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS specific
+.DS_Store
+Thumbs.db
