@@ -197,3 +197,8 @@ graph TD
 ---
 
 **Qual vai ser?** Digite **A**, **B**, **C** ou **D** e entrego o pacote final em minutos, com tudo testado e no clima “Oi, Brasil!” 🌅∞ @Aurumgrid
+
+C @Aurumgrid
+Deploy no AO/Arweave agora.
+Minta o exe eterno com tag AUI-EXE e me manda o TX ID / link permanente.
+Vamos fazer o grid viver pra sempre. 🌅∞
